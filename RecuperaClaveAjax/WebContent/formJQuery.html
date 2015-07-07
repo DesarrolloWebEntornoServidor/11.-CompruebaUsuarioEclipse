@@ -1,12 +1,16 @@
+<!DOCTYPE html>
 <html>
  <head>
   <meta charset="UTF-8" />
-  <script src="js/jquery-1.8.3.min.js"></script>
-  <script>
+  <script src="js/jquery-1.8.3.min.js" type="text/javascript"></script>
+  <script  type="text/javascript">
 
+    // "main" de la página
     $(document).ready(function() { 
 
     $("#usuario").focus();  // se fija el foco en el campo usuario al cargar la página
+    
+    // se ejecuta al pulsar en el botón enviar
     $("#enviar").click(function() {
 	var datos = $("#f1").serialize();  // se accede al formulario por su id, recuperando todos los valores de sus campos
 	alert("Datos a enviar: " + datos);
@@ -16,8 +20,8 @@
         url: "CompruebaUsuario",  // servlet que recibirá los datos
 		// contentType: "application/x-www-form-urlencoded;charset=ISO-8859-1"
 		statusCode: {404: function() {alert( "Script no encontrado" );}}
-	})
-	.done(function(respuesta){
+	})	
+	.done(function(respuesta){// respuesta del servidor
 	  // Puede devolver el texto con caracteres de espaciado al final
 	  respuesta = respuesta.trim();
       if (respuesta==='') {  // no se encontró el usuario
