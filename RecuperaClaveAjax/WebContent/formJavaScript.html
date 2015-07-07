@@ -1,0 +1,48 @@
+<html>
+ <head>
+  <meta charset="UTF-8" />
+  <title>formularioJavaScript</title>
+  <script>
+    function recuperaContrasenia() {
+        // se genera la query_string
+        var datos = 'usuario=' + document.getElementById("usuario").value;
+        alert("Datos a enviar: " + datos);
+
+        var xmlhttp;  // objeto XMLHttpRequest
+        if (window.XMLHttpRequest) {  // para IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttp = new XMLHttpRequest();
+        } else {  // para IE6, IE5
+            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        xmlhttp.onreadystatechange = function() {
+        // si el resultado está listo (readyState==4) y la respuesta es correcta (status==200)
+        if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+            var respuesta = xmlhttp.responseText;
+            respuesta=respuesta.trim();
+            if (respuesta=='') {  // no se encontró el usuario
+            document.getElementById("usuarioInexistente").style.visibility = 'visible';
+            } else {
+            document.getElementById("usuarioInexistente").style.visibility = 'hidden';
+            }
+            document.getElementById("clave").value = respuesta;
+            document.getElementById("usuario").focus();
+        }
+    }
+    xmlhttp.open("GET","CompruebaUsuario?" + datos ,true);  // crea la conexión con parámetros: método, url, asíncrono?
+    xmlhttp.setRequestHeader("X-Requested-With", "xmlhttprequest");  // establece la cabecera HTTP necesaria
+    xmlhttp.send();  // lanza la solicitud
+    }
+  </script>
+ </head>
+
+ <body>
+  <h1>RecuperaClaveA</h1>
+  <div id="usuarioInexistente" style="visibility: hidden; color: red;">El usuario no existe</div>
+  <form name="f1" id="f1">
+    Usuario <input type="text" name="usuario" id="usuario" />
+    (Probar con: <b>buenos</b>, <b>así</b>, <b>compañeros</b> y <b>felices</b>) <br /> <br />
+    <input type="button" id="enviar" value="Recuperar clave" onclick="recuperaContrasenia();" /> <br /> <br />
+    Contraseña <input type="text" id="clave" readonly="readonly" />
+  </form>
+ </body>
+</html>

@@ -1,0 +1,46 @@
+<html>
+ <head>
+  <meta charset="UTF-8" />
+  <script src="js/jquery-1.8.3.min.js"></script>
+  <script>
+
+    $(document).ready(function() { 
+
+    $("#usuario").focus();  // se fija el foco en el campo usuario al cargar la página
+    $("#enviar").click(function() {
+	var datos = $("#f1").serialize();  // se accede al formulario por su id, recuperando todos los valores de sus campos
+	alert("Datos a enviar: " + datos);
+	$.ajax({
+        data: datos,  // datos a enviar
+        type: "GET",  // método de envío
+        url: "CompruebaUsuario",  // servlet que recibirá los datos
+		// contentType: "application/x-www-form-urlencoded;charset=ISO-8859-1"
+		statusCode: {404: function() {alert( "Script no encontrado" );}}
+	})
+	.done(function(respuesta){
+	  // Puede devolver el texto con caracteres de espaciado al final
+	  respuesta = respuesta.trim();
+      if (respuesta==='') {  // no se encontró el usuario
+	    $("#usuarioInexistente").css("visibility", "visible");
+	  } else {
+		$("#usuarioInexistente").css("visibility", "hidden");
+      }
+	  $("#clave").val(respuesta);
+	  $("#usuario").focus();
+	});
+    });
+
+  });	
+  </script>
+ </head>
+ <body> 
+  <h1>RecuperaClaveB</h1>
+  <div id="usuarioInexistente" style="visibility: hidden; color: red;">El usuario no existe</div>
+  <form name="f1" id="f1">
+   Usuario <input type="text" name="usuario" id="usuario" />
+   (Probar con: <b>buenos</b>, <b>así</b>, <b>compañeros</b> y <b>felices</b>) <br /> <br />
+   <input type="button" id="enviar" value="Recuperar clave" /> <br /> <br /> <br />
+   Clave <input type="text" id="clave" readonly="readonly" />
+  </form>
+ </body>
+</html>
